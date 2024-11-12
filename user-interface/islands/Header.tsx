@@ -1,49 +1,29 @@
-export function Header() {
+import { useState } from "preact/hooks";
+import { ListItemProps } from "../core/utils/AppInterfaces.interfaces.ts";
+import { components } from "../core/utils/AppConstants.constants.ts";
+
+function ListItem({ className = "", title, children, href }: ListItemProps) {
     return (
-        // <header className="bg-white">
-        //     <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-        //         <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
-        //             <div>
-        //                 <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Blog Posts</h1>
-        //
-        //                 <p className="mt-1.5 text-sm text-gray-500">
-        //                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iure, recusandae.
-        //                 </p>
-        //             </div>
-        //
-        //             <div className="flex items-center gap-4">
-        //                 <button
-        //                     className="inline-flex items-center justify-center gap-1.5 rounded border border-gray-200 bg-white px-5 py-3 text-gray-900 transition hover:text-gray-700 focus:outline-none focus:ring"
-        //                     type="button"
-        //                 >
-        //                     <span className="text-sm font-medium"> View Website </span>
-        //
-        //                     <svg
-        //                         xmlns="http://www.w3.org/2000/svg"
-        //                         className="size-4"
-        //                         fill="none"
-        //                         viewBox="0 0 24 24"
-        //                         stroke="currentColor"
-        //                         stroke-width="2"
-        //                     >
-        //                         <path
-        //                             stroke-linecap="round"
-        //                             stroke-linejoin="round"
-        //                             d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-        //                         />
-        //                     </svg>
-        //                 </button>
-        //
-        //                 <button
-        //                     className="inline-block rounded bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
-        //                     type="button"
-        //                 >
-        //                     Create Post
-        //                 </button>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </header>
+        <li>
+            <a
+                href={href}
+                className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 ${className}`}
+            >
+                <div className="text-sm font-medium leading-none">{title}</div>
+                <p className="text-sm leading-snug text-gray-600">{children}</p>
+            </a>
+        </li>
+    );
+}
+
+export default function Header() {
+    const [activeMenu, setActiveMenu] = useState<string | null>(null);
+
+    const toggleMenu = (menuName: string) => {
+        setActiveMenu(activeMenu === menuName ? null : menuName);
+    };
+
+    return (
         <header
             className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-border">
             <div className="flex h-14 items-center px-4">
@@ -56,20 +36,96 @@ export function Header() {
                               stroke-linejoin="round" stroke-width="32"></line>
                     </svg>
                     <span className="hidden font-bold lg:inline-block">shadcn/ui</span></a>
-                    <nav className="flex items-center gap-4 text-sm xl:gap-6"><a
-                        className="transition-colors hover:text-foreground/80 text-foreground/60"
-                        href="/docs">Docs</a><a className="transition-colors hover:text-foreground/80 text-foreground"
-                                                href="/docs/components">Components</a><a
-                        className="transition-colors hover:text-foreground/80 text-foreground/60"
-                        href="/blocks">Blocks</a><a
-                        className="transition-colors hover:text-foreground/80 text-foreground/60"
-                        href="/charts">Charts</a><a
-                        className="transition-colors hover:text-foreground/80 text-foreground/60"
-                        href="/themes">Themes</a><a
-                        className="hidden transition-colors hover:text-foreground/80 lg:inline-block text-foreground/60"
-                        href="/examples">Examples</a><a
-                        className="transition-colors hover:text-foreground/80 text-foreground/60"
-                        href="/colors">Colors</a></nav>
+                    <nav className="relative flex items-center gap-4 text-sm xl:gap-6">
+                        <ul className="flex space-x-4">
+                            <li className="relative">
+                                <button
+                                    className="transition-colors hover:text-foreground/80 text-foreground/60"
+                                    onClick={() => toggleMenu("gettingStarted")}
+                                >
+                                    Getting started
+                                </button>
+                                {activeMenu === "gettingStarted" && (
+                                    <div className="absolute left-0 mt-2 w-max bg-white shadow-lg">
+                                        <ul className="grid gap-3 p-6 md:w-96 lg:grid-cols-2">
+                                            <li className="row-span-3">
+                                                <a
+                                                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-gray-100 to-gray-200 p-6 no-underline outline-none focus:shadow-md"
+                                                    href="/"
+                                                >
+                                                    <div className="h-6 w-6 mb-4">
+                                                        {/* Replace with your logo or icon */}
+                                                        <img
+                                                            src="/logo.svg"
+                                                            alt="Logo"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-2 text-lg font-medium">
+                                                        Your Project Name
+                                                    </div>
+                                                    <p className="text-sm leading-tight text-gray-600">
+                                                        Beautifully designed components
+                                                        that you can copy and paste into
+                                                        your apps. Accessible.
+                                                        Customizable. Open Source.
+                                                    </p>
+                                                </a>
+                                            </li>
+                                            <ListItem href="/docs" title="Introduction">
+                                                Re-usable components built using Radix
+                                                UI and Tailwind CSS.
+                                            </ListItem>
+                                            <ListItem
+                                                href="/docs/installation"
+                                                title="Installation"
+                                            >
+                                                How to install dependencies and
+                                                structure your app.
+                                            </ListItem>
+                                            <ListItem
+                                                href="/docs/primitives/typography"
+                                                title="Typography"
+                                            >
+                                                Styles for headings, paragraphs,
+                                                lists...etc
+                                            </ListItem>
+                                        </ul>
+                                    </div>
+                                )}
+                            </li>
+                            <li className="relative">
+                                <button
+                                    className="transition-colors hover:text-foreground/80 text-foreground/60"
+                                    onClick={() => toggleMenu("components")}
+                                >
+                                    Components
+                                </button>
+                                {activeMenu === "components" && (
+                                    <div className="absolute left-0 mt-2 w-max bg-white shadow-lg">
+                                        <ul className="grid gap-3 p-4 md:w-96 md:grid-cols-2 lg:w-[600px]">
+                                            {components.map((component) => (
+                                                <ListItem
+                                                    key={component.title}
+                                                    title={component.title}
+                                                    href={component.href}
+                                                >
+                                                    {component.description}
+                                                </ListItem>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </li>
+                            <li className="relative flex items-center">
+                                <a
+                                    href="/docs"
+                                    className="transition-colors hover:text-foreground/80 text-foreground/60"
+                                >
+                                    Documentation
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
                 <button
                     className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:text-accent-foreground py-2 -ml-2 mr-2 h-8 w-8 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
@@ -123,5 +179,5 @@ export function Header() {
                 </div>
             </div>
         </header>
-    )
+    );
 }

@@ -1,9 +1,7 @@
 import { type PageProps } from "$fresh/server.ts";
-import {Header} from "../components/headers/Header.tsx";
-import NavigationMenuDemo from "../islands/NavigationMenuDemo.tsx";
+import Header from "../islands/Header.tsx";
 import HeroOne from "../components/heros/HeroOne.tsx";
 import HeroTwo from "../components/heros/HeroTwo.tsx";
-// import NavigationMenuDemo from "../components/headers/NavDemo.tsx";
 export default function App({ Component }: PageProps) {
   return (
     <html>
@@ -14,8 +12,7 @@ export default function App({ Component }: PageProps) {
         <link rel="stylesheet" href="/styles.css" />
       </head>
       <body>
-        <Header/>
-        <NavigationMenuDemo />
+        <Header />
         <HeroOne />
         <HeroTwo />
         <Component />
